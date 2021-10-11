@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
   });
 //   console.log(socket)//Try to play with this socket
 
-    socket.on("SENDER_NUMBER__RECIVER_NUMBER", (msg)=>{
-        io.emit('SENDER_NUMBER__RECIVER_NUMBER', msg);
+    socket.on("chat", (msgObject)=>{
+        io.emit(`chat_${msgObject.sender}_${msgObject.reciver}`, msgObject.text);
     });
 });
