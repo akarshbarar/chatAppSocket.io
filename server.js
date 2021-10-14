@@ -1,24 +1,13 @@
 const express = require("express");
-const app = express();
 const http = require('http');
+const app = express();
 const server = http.createServer(app);
 //Initializing Socket server
-const { Server } = require("socket.io");
-const io = new Server(server);
+const io = require("socket.io")(server);
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Credentials", "true");
-    next();
-});
+app.use(express.json());
 
-app.get("/",(req, res)=>{
-     res.sendFile(__dirname + '/index.html');
-});
-
-server.listen(3000, ()=>{
+server.listen(3000,"0.0.0.0", ()=>{
     console.log(` SERVER RUNNING AT 3000`)
     
 });
@@ -28,9 +17,4 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
-//   console.log(socket)//Try to play with this socket
-
-    socket.on("chat", (msgObject)=>{
-        io.emit(`chat_${msgObject.sender}_${msgObject.reciver}`, msgObject.text);
-    });
 });
